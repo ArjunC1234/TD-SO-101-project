@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "so101-sim": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "C:/path/to/TD-SO-101-project/IsaacLabTutorial",
+        "run",
+        "--locked",
+        "so101-mcp"
+      ]
+    }
+  }
+}

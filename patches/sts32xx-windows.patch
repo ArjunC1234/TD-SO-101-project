@@ -1,0 +1,66 @@
+diff --git a/QUICKSTART.md b/QUICKSTART.md
+index 90a5cb3..bc5cf96 100644
+--- a/QUICKSTART.md
++++ b/QUICKSTART.md
+@@ -15,6 +15,33 @@ tools/flash/.venv/bin/python -m pip install -r tools/flash/requirements.txt
+ export SERVO_PORT=/dev/cu.usbmodemYOUR_ADAPTER
+ ```
+ 
++### Windows PowerShell
++
++Run from the repository root. No virtual environment activation or execution
++policy change is needed:
++
++```powershell
++npm.cmd ci
++python -m venv tools/flash/.venv
++.\tools\flash\.venv\Scripts\python.exe -m pip install -r tools/flash/requirements.txt
++```
++
++Verify the installation without connecting an arm:
++
++```powershell
++npm.cmd test
++.\tools\flash\.venv\Scripts\python.exe -m unittest discover -s tools/flash/tests
++npm.cmd run settings -- --help
++.\tools\flash\.venv\Scripts\python.exe tools/flash/flash.py --help
++```
++
++When the adapter is connected, set `$env:SERVO_PORT = 'COM3'` with its actual
++port. Use `npm.cmd` instead of `npm` in the commands below, and use
++`.\tools\flash\.venv\Scripts\python.exe` instead of the Unix environment path.
++Hardware discovery, backups, calibration and flashing require the powered motor
++bus. The optional telemetry viewer has its own installation in
++[tools/simulation/README.md](tools/simulation/README.md).
++
+ Replace the port with yours, such as `/dev/ttyUSB0` on Linux. Examples use motor
+ ID **1** and baud **1000000**; adjust these to match your servo.
+ 
+diff --git a/tools/settings/test/calibration.test.js b/tools/settings/test/calibration.test.js
+index 56a34fb..dbd6807 100644
+--- a/tools/settings/test/calibration.test.js
++++ b/tools/settings/test/calibration.test.js
+@@ -144,7 +144,8 @@ test('bad expected range files fail before opening the serial port or reserving
+ test('one calibration command replaces the separate reference workflow', () => {
+   const options = parseArguments(['calibrate', '--port', '/dev/test']);
+   assert.equal(options.id, undefined);
+-  assert.match(options.file, /calibrations\/calibration-/);
++  assert.equal(path.dirname(options.file), path.join('tools', 'settings', 'calibrations'));
++  assert.match(path.basename(options.file), /^calibration-/);
+   assert.throws(() => parseArguments(['calibrate', '--port', '/dev/test', '--id', '2']), /Use --ids/);
+   assert.throws(() => parseArguments(['reference', '--port', '/dev/test', '--file', 'arm.json']), /Usage/);
+ });
+diff --git a/tools/settings/test/settings.test.js b/tools/settings/test/settings.test.js
+index e148566..4858e8e 100644
+--- a/tools/settings/test/settings.test.js
++++ b/tools/settings/test/settings.test.js
+@@ -58,7 +58,8 @@ test('parse discovery, backup and restore with supported baud rates and explicit
+   const backup = parseArguments(['backup', '--port', '/dev/fake', '--id', '7', '--baud', '500000']);
+   assert.equal(backup.id, 7);
+   assert.equal(backup.baudRate, 500000);
+-  assert.match(backup.file, /^tools\/settings\/backups\/servo-7-/);
++  assert.equal(path.dirname(backup.file), path.join('tools', 'settings', 'backups'));
++  assert.match(path.basename(backup.file), /^servo-7-/);
+   assert.equal(parseArguments(['discover', '--port', '/dev/fake']).id, undefined);
+   assert.equal(parseArguments(['restore', '--port', '/dev/fake', '--id', '3', '--file', 'backup.json']).file, 'backup.json');
+   assert.deepEqual(parseArguments(['--help']), { help: true });

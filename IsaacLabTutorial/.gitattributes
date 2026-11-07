@@ -1,0 +1,17 @@
+*.usd -text
+*.usda -text
+*.usdc -text
+*.png -text
+*.psd -text
+*.hdr -text
+*.dae -text
+*.mtl -text
+*.obj -text
+*.gif -text
+*.mp4 -text
+*.pt -text
+# Reset datasets are small, required runtime inputs. Keep them as ordinary
+# Git blobs so a fresh checkout can train without Git LFS.
+src/isaaclab_tutorial/assets/reset_poses.pt -filter -diff -merge -text
+*.jit -text
+*.hdf5 -text

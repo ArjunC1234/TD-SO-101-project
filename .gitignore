@@ -1,0 +1,41 @@
+# Environments, secrets, and package caches
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.cache/
+*.egg-info/
+
+# Local experiments and robot-specific state
+logs/
+outputs/
+output/
+runs/
+wandb/
+recordings/
+datasets/
+backups/
+calibrations/
+external/
+*.log
+*.tmp
+*.bak
+imgui.ini
+*.pt
+*.onnx
+*.jit
+!IsaacLabTutorial/src/isaaclab_tutorial/assets/reset_poses.pt
+
+# Machine-specific editor configuration
+.cursor/mcp.json
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
